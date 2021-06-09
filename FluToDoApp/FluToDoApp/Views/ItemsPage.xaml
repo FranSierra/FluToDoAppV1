@@ -8,7 +8,7 @@
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+        <ToolbarItem Text="New" Command="{Binding AddItemCommand}" />
     </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
@@ -20,41 +20,32 @@
                 SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    
+
                     <StackLayout Padding="10" x:DataType="model:TodoItem">
-                        <Label Text="{Binding Name}" 
+                        <StackLayout BackgroundColor="#c5ddf3" Padding="15,0">
+                            <Label Text="{Binding Name}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
-                            FontSize="16" />
-                        <StackLayout    Padding="15,0">
-                            <CheckBox PropertyChanged="CheckBox_PropertyChanged" HorizontalOptions="End" 
+                            FontAttributes="Bold"
+                            FontSize="18" TextColor="#FFFFFF"/>
+
+                            <CheckBox PropertyChanged="CheckBox_PropertyChanged" HorizontalOptions="End" Color="#488c60"
                                       IsChecked="{Binding IsComplete, Mode=TwoWay}">
-                                <!--<CheckBox.Behaviors>
-                                    --><!--<x:EventToCommandBehavior
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, 
-                                                Path=CheckItemCommand}"
-                                        CommandParameter="{Binding .}"
-                                         />--><!--
-                                </CheckBox.Behaviors>-->
-                                <!--<CheckBox.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=CheckItemCommand}"
-                                                          CommandParameter="{Binding .}"/>
-                                </CheckBox.GestureRecognizers>-->
                             </CheckBox>
-                            
-                            <Button Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Text="Delete" 
+
+                            <Button Scale="0.75" BackgroundColor="Red" Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Text="Delete" 
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, 
                                 Path=RemoveItemCommand}" CommandParameter="{Binding .}">
                             </Button>
-                        </StackLayout>
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                NumberOfTapsRequired="2"
+
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
                                 CommandParameter="{Binding .}">
-                            </TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>
+                                </TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+                        </StackLayout>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

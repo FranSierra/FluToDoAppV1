@@ -6,6 +6,7 @@ namespace FluToDoApp.Configuration
 {
     public interface IConfiguration
     {
-        string ApiUrlBase { get; set; }
+        string UrlBase { get; set; }
+        string ApiUrl { get; set; }
     }
 }

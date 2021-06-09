@@ -11,6 +11,7 @@ namespace FluToDoApp.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IApiService<TodoItem> DataStore => DependencyService.Get<IApiService<TodoItem>>();
+        public IMessageService MessageService => DependencyService.Get<Services.IMessageService>();
 
         bool isBusy = false;
         public bool IsBusy

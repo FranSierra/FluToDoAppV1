@@ -11,7 +11,6 @@ namespace FluToDoApp.ViewModels
     public class ItemsViewModel : BaseViewModel
     {
         private TodoItem _selectedItem;
-        private readonly Services.IMessageService _messageService;
 
         public ObservableCollection<TodoItem> Items { get; }
         public Command LoadItemsCommand { get; }
@@ -31,8 +30,6 @@ namespace FluToDoApp.ViewModels
             AddItemCommand = new Command(OnAddItem);
 
             RemoveItemCommand = new Command<TodoItem>(OnDeleteItem);
-
-            _messageService = DependencyService.Get<Services.IMessageService>();
 
         }
 
@@ -83,8 +80,8 @@ namespace FluToDoApp.ViewModels
         private async void OnDeleteItem(TodoItem item)
         {
             await DataStore.DeleteItemAsync(item.Key);
-            await ExecuteLoadItemsCommand();
-            await _messageService.ShowAsync(Title, $"La Tarea {item.Name} ha sido eliminada correctamente", "Ok");
+            IsBusy = true;
+            await MessageService.ShowAsync(Title, $"ToDo item '{item.Name}' has been deleted correctly", "Ok");
         }
 
         async void OnItemSelected(TodoItem item)

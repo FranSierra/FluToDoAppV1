@@ -3,19 +3,22 @@ using FluToDoApp.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Xamarin.Forms;
 
 namespace FluToDoApp.Services
 {
     public class TodoApiService : IApiService<TodoItem>
     {
         HttpClient client;
-        string urlBase;
-        IConfiguration _configuration;
-        
+        string apiUrl;
+        private IConfiguration _configuration => DependencyService.Get<IConfiguration>();
+
         public TodoApiService()
         {
             HttpClientHandler clientHandler = new HttpClientHandler
@@ -23,9 +26,9 @@ namespace FluToDoApp.Services
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
             };
             client = new HttpClient(clientHandler);
-            //_configuration = new ConfigurationApp();
-            urlBase = "/api/todo";//_configuration.ApiUrlBase;
-            client.BaseAddress = new Uri("http://192.168.1.102:8080");
+            client.BaseAddress = new Uri(_configuration.UrlBase);
+            apiUrl = _configuration.ApiUrl;
+
         }
         public async Task<bool> AddItemAsync(TodoItem item)
         {
@@ -35,7 +38,7 @@ namespace FluToDoApp.Services
 
             try
             {
-                HttpResponseMessage response = await client.PostAsync(urlBase, httpContent);
+                HttpResponseMessage response = await client.PostAsync(apiUrl, httpContent);
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -45,7 +48,7 @@ namespace FluToDoApp.Services
             {
                 Console.WriteLine($"Error al crear item: {e.Message}");
             }
-            
+
             return false;
         }
 
@@ -53,7 +56,7 @@ namespace FluToDoApp.Services
         {
             try
             {
-                HttpResponseMessage response = await client.DeleteAsync($"{urlBase}/{id}");
+                HttpResponseMessage response = await client.DeleteAsync($"{apiUrl}/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -71,7 +74,7 @@ namespace FluToDoApp.Services
             var item = new TodoItem();
             try
             {
-                HttpResponseMessage response = await client.GetAsync($"{urlBase}/{id}");
+                HttpResponseMessage response = await client.GetAsync($"{apiUrl}/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -91,7 +94,7 @@ namespace FluToDoApp.Services
             List<TodoItem> items = new List<TodoItem>();
             try
             {
-                HttpResponseMessage response = await client.GetAsync(urlBase);
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -102,8 +105,8 @@ namespace FluToDoApp.Services
             {
                 Console.WriteLine($"Error al obtener items: {e.Message}");
             }
-           
-           
+
+
             return items;
         }
 
@@ -115,7 +118,7 @@ namespace FluToDoApp.Services
             StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await client.PutAsync($"{urlBase}/{id}", httpContent);
+                HttpResponseMessage response = await client.PutAsync($"{apiUrl}/{id}", httpContent);
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -123,9 +126,9 @@ namespace FluToDoApp.Services
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"Ha ocurrido el siguiente error al actuaizar: {e.Message}");                
+                Console.WriteLine($"Ha ocurrido el siguiente error al actuaizar: {e.Message}");
             }
-            
+
             return false;
         }
     }

@@ -1,3 +1,4 @@
 {
-  "ApiUrlBase": "http://localhost:8080/api/todo"
+  "UrlBase": "http://192.168.1.102:8080",
+  "ApiUrl": "/api/todo"
 }

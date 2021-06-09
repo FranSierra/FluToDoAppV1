@@ -6,15 +6,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Configuration\config.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\config.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Configuration\config.json" />
   </ItemGroup>
  
 </Project>

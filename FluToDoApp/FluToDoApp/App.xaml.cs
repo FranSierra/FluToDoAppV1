@@ -16,6 +16,8 @@ namespace FluToDoApp
 
             DependencyService.Register<TodoApiService>();
             DependencyService.Register<IMessageService, MessageService>();
+            DependencyService.Register<IConfiguration, ConfigurationApp>();
+
             MainPage = new AppShell();
         }
 

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FluToDoApp.Views.ItemsPage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:FluToDoApp.ViewModels"  
+             xmlns:model="clr-namespace:FluToDoApp.Models"  
+             x:Name="BrowseItemsPage">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+    </ContentPage.ToolbarItems>
+    <!--
+      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    
+                    <StackLayout Padding="10" x:DataType="model:TodoItem">
+                        <Label Text="{Binding Name}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="16" />
+                        <StackLayout    Padding="15,0">
+                            <CheckBox PropertyChanged="CheckBox_PropertyChanged" HorizontalOptions="End" 
+                                      IsChecked="{Binding IsComplete, Mode=TwoWay}">
+                                <!--<CheckBox.Behaviors>
+                                    --><!--<x:EventToCommandBehavior
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, 
+                                                Path=CheckItemCommand}"
+                                        CommandParameter="{Binding .}"
+                                         />--><!--
+                                </CheckBox.Behaviors>-->
+                                <!--<CheckBox.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=CheckItemCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </CheckBox.GestureRecognizers>-->
+                            </CheckBox>
+                            
+                            <Button Grid.Row="1" Grid.Column="1" HorizontalOptions="End" Text="Delete" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, 
+                                Path=RemoveItemCommand}" CommandParameter="{Binding .}">
+                            </Button>
+                        </StackLayout>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="2"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
